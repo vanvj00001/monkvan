@@ -8,6 +8,7 @@ description = '老梵的个人随笔和思考'
 author = '老梵'
 showVisitedLinks = true
 showReadingTime = true
+summaryLength = 200
 
 [[menu.main]]
 name = "首页"
@@ -23,7 +24,3 @@ weight = 2
 name = "关于"
 url = "/about/"
 weight = 3
-
-[params]
-  # 设置摘要最大长度（字符数）
-  summaryLength = 200
