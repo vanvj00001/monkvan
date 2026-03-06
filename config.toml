@@ -1,5 +1,42 @@
-// 在config.toml中添加输出配置
+# config.toml
+baseURL = "https://vanvj00001.github.io/my-blog/"
+languageCode = "zh-cn"
+title = "无名梵的博客"
+theme = "PaperMod"
+
+# 菜单配置
+[menu]
+[[menu.main]]
+identifier = "posts"
+name = "文章"
+url = "/posts/"
+weight = 10
+[[menu.main]]
+identifier = "archives"
+name = "归档"
+url = "/archives/"
+weight = 20
+[[menu.main]]
+identifier = "tags"
+name = "标签"
+url = "/tags/"
+weight = 30
+[[menu.main]]
+identifier = "search"
+name = "搜索"
+url = "/search/"
+weight = 40
+
+# 输出配置（支持搜索功能）
 [outputs]
-  home = ["HTML", "RSS", "JSON"]
-  
-# 或者创建data文件来存储索引
+home = ["HTML", "RSS", "JSON"]
+
+# 参数配置
+[params]
+mainSections = ["posts"]
+defaultTheme = "auto"
+description = "无名梵的个人博客"
+
+# 作者信息
+[author]
+name = "无名梵"
