@@ -1,9 +1,60 @@
 <!-- layouts/_default/archives.html -->
 {{ define "main" }}
-<div style="background: yellow; padding: 20px; border: 2px solid red;">
-<h1>🔧 测试归档页面 - 模板加载成功！</h1>
-<p>页面标题：{{ .Title }}</p>
-<p>页面内容：{{ .Content }}</p>
-<p>当前时间：{{ now }}</p>
+<div class="archives" style="max-width: 800px; margin: 0 auto; padding: 2rem 1rem;">
+    <h1>{{ .Title }}</h1>
+    
+    <p>{{ .Content }}</p>
+    
+    <!-- 搜索框 -->
+    <input type="text" id="archive-search" placeholder="🔍 搜索文章..." 
+           style="width: 100%; padding: 10px; margin: 20px 0; border: 1px solid #ccc;">
+    
+    <!-- 按年份归档 -->
+    {{ $pages := where .Site.RegularPages "Type" "in" .Site.Params.mainSections }}
+    {{ $grouped := $pages.GroupByDate "2006" }}
+    
+    <div id="archive-content">
+    {{ range $grouped }}
+        <section class="year-section" data-year="{{ .Key }}">
+            <h2 style="border-bottom: 2px solid #333; padding-bottom: 5px;">{{ .Key }}年</h2>
+            {{ range .Pages }}
+            <article class="post-item" data-title="{{ .Title | lower }}" data-content="{{ .Plain | lower }}" 
+                     style="margin: 15px 0; padding: 15px; border-left: 4px solid #007acc;">
+                <h3 style="margin: 0 0 5px 0;">
+                    <a href="{{ .RelPermalink }}" style="text-decoration: none;">{{ .Title }}</a>
+                </h3>
+                <time style="color: #666;">{{ .Date.Format "2006-01-02" }}</time>
+                {{ if .Params.tags }}
+                <div style="margin-top: 5px;">
+                    {{ range .Params.tags }}
+                    <span style="background: #f0f0f0; padding: 2px 6px; margin-right: 5px;">#{{ . }}</span>
+                    {{ end }}
+                </div>
+                {{ end }}
+                <p style="margin-top: 5px; color: #666;">{{ .Summary }}</p>
+            </article>
+            {{ end }}
+        </section>
+    {{ end }}
+    </div>
 </div>
+
+<script>
+document.getElementById('archive-search').addEventListener('input', function(e) {
+    const keyword = e.target.value.toLowerCase();
+    const items = document.querySelectorAll('.post-item');
+    const sections = document.querySelectorAll('.year-section');
+    
+    items.forEach(item => {
+        const title = item.dataset.title || '';
+        const content = item.dataset.content || '';
+        item.style.display = (keyword === '' || title.includes(keyword) || content.includes(keyword)) ? 'block' : 'none';
+    });
+    
+    sections.forEach(section => {
+        const visibleItems = section.querySelectorAll('.post-item[style="display: block"]');
+ section.style.display = visibleItems.length > 0 ? 'block' : 'none';
+    });
+});
+</script>
 {{ end }}
