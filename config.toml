@@ -2,7 +2,7 @@
 baseURL = "https://vanvj00001.github.io/my-blog/"
 languageCode = "zh-cn"
 title = "无名梵的博客"
-theme = "PaperMod"
+theme = "ananke"
 
 # 菜单配置
 [menu]
