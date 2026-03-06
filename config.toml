@@ -4,39 +4,27 @@ languageCode = "zh-cn"
 title = "无名梵的博客"
 theme = "ananke"
 
-# 菜单配置
 [menu]
+[[menu.main]]
+identifier = "home"
+name = "首页"
+url = "/"
+weight = 10
 [[menu.main]]
 identifier = "posts"
 name = "文章"
 url = "/posts/"
-weight = 10
+weight = 20
 [[menu.main]]
 identifier = "archives"
 name = "归档"
 url = "/archives/"
-weight = 20
+weight = 30
 [[menu.main]]
 identifier = "tags"
 name = "标签"
 url = "/tags/"
-weight = 30
-[[menu.main]]
-identifier = "search"
-name = "搜索"
-url = "/search/"
 weight = 40
 
-# 输出配置（支持搜索功能）
-[outputs]
-home = ["HTML", "RSS", "JSON"]
-
-# 参数配置
 [params]
-mainSections = ["posts"]
-defaultTheme = "auto"
 description = "无名梵的个人博客"
-
-# 作者信息
-[author]
-name = "无名梵"

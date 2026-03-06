@@ -3,7 +3,7 @@ title: "归档"
 layout: "archives"
 menu:
     main:
-        weight: 20
+        weight: 30
         identifier: archives
 ---
 
