@@ -4,27 +4,9 @@ languageCode = "zh-cn"
 title = "无名梵的博客"
 theme = "ananke"
 
-[menu]
-[[menu.main]]
-identifier = "home"
-name = "首页"
-url = "/"
-weight = 10
-[[menu.main]]
-identifier = "posts"
-name = "文章"
-url = "/posts/"
-weight = 20
-[[menu.main]]
-identifier = "archives"
-name = "归档"
-url = "/archives/"
-weight = 30
-[[menu.main]]
-identifier = "tags"
-name = "标签"
-url = "/tags/"
-weight = 40
-
+# 使用Ananke主题的默认配置
 [params]
-description = "无名梵的个人博客"
+  description = "无名梵的个人博客"
+  featured_image = "/images/gohugo-default-sample-hero-image.jpg"
+  
+# 菜单配置 - 让Ananke自动处理
