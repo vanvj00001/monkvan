@@ -1,107 +1,51 @@
 <!-- layouts/_default/archives.html -->
 {{ define "main" }}
-<div class="archives">
-<h1>{{ .Title }}</h1>
-
-<!-- 实时搜索框 -->
-<input type="text" id="search-archives" placeholder="🔍 搜索文章标题和内容..."
-style="width: 100%; padding: 10px; margin: 20px 0; border: 1px solid #ccc;">
-
-<!-- 按年份分组 -->
-{{ $pages := where .Site.RegularPages "Type" "in" .Site.Params.mainSections }}
-{{ $grouped := $pages.GroupByDate "2006" }}
-
-{{ range $grouped }}
-<div class="year-section" data-year="{{ .Key }}">
-<h2>{{ .Key }}年</h2>
-{{ range .Pages }}
-<div class="post-item" data-title="{{ .Title | lower }}" data-content="{{ .Plain | lower }}">
-<a href="{{ .RelPermalink }}" class="post-title">{{ .Title }}</a>
-<span class="post-date">{{ .Date.Format "2006-01-02" }}</span>
-{{ if .Params.tags }}
-<div class="post-tags">
-{{ range .Params.tags }}
-<span class="tag">#{{ . }}</span>
-{{ end }}
+<div class="archives" style="max-width: 800px; margin: 0 auto; padding: 2rem 1rem;">
+    <h1>{{ .Title }}</h1>
+    
+    <!-- 页面内容 -->
+    <p>{{ .Content }}</p>
+    
+    <!-- 搜索框 -->
+    <input type="text" id="archive-search" placeholder="🔍 搜索文章..." 
+           style="width: 100%; padding: 10px; margin: 20px 0; border: 1px solid #ccc;">
+    
+    <!-- 按年份归档 -->
+    {{ $pages := where .Site.RegularPages "Type" "in" .Site.Params.mainSections }}
+    {{ $grouped := $pages.GroupByDate "2006" }}
+    
+    <div id="archive-content">
+    {{ range $grouped }}
+        <section class="year-section" data-year="{{ .Key }}">
+            <h2>{{ .Key }}年</h2>
+            {{ range .Pages }}
+            <article class="post-item" data-title="{{ .Title | lower }}" data-content="{{ .Plain | lower }}">
+                <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+                <time>{{ .Date.Format "2006-01-02" }}</time>
+                {{ if .Params.tags }}
+                <div>
+                    {{ range .Params.tags }}
+                    <span style="background: #f0f0f0; padding: 2px 6px; margin-right: 5px;">#{{ . }}</span>
+                    {{ end }}
+                </div>
+                {{ end }}
+                <p>{{ .Summary }}</p>
+            </article>
+            {{ end }}
+        </section>
+    {{ end }}
+    </div>
 </div>
-{{ end }}
-<p class="post-summary">{{ .Summary }}</p>
-</div>
-{{ end }}
-</div>
-{{ end }}
-</div>
-
-<style>
-.post-item {
-margin: 15px 0;
-padding: 10px;
-border-left: 3px solid #007acc;
-}
-
-.post-title {
-font-size: 1.2em;
-font-weight: bold;
-text-decoration: none;
-color: #333;
-}
-
-.post-date {
-color: #666;
-font-size: 0.9em;
-margin-left: 10px;
-}
-
-.post-tags {
-margin-top: 5px;
-}
-
-.tag {
-background: #f0f0f0;
-padding: 2px 6px;
-border-radius: 3px;
-margin-right: 5px;
-font-size: 0.8em;
-}
-
-.post-summary {
-margin-top: 5px;
-color: #666;
-font-size: 0.9em;
-}
-
-.hidden {
-display: none;
-}
-</style>
 
 <script>
-document.getElementById('search-archives').addEventListener('input', function(e) {
-const keyword = e.target.value.toLowerCase();
-const items = document.querySelectorAll('.post-item');
-const sections = document.querySelectorAll('.year-section');
-
-// 过滤文章
-items.forEach(item => {
-const title = item.dataset.title;
-const content = item.dataset.content;
-
-if (keyword === '' || title.includes(keyword) || content.includes(keyword)) {
-item.classList.remove('hidden');
-} else {
-item.classList.add('hidden');
-}
-});
-
-// 隐藏空的年份
-sections.forEach(section => {
-const visibleItems = section.querySelectorAll('.post-item:not(.hidden)');
-if (visibleItems.length === 0) {
-section.style.display = 'none';
-} else {
-section.style.display = 'block';
-}
-});
-});
-</script>
-{{ end }}
+document.getElementById('archive-search').addEventListener('input', function(e) {
+    const keyword = e.target.value.toLowerCase();
+    const items = document.querySelectorAll('.post-item');
+    const sections = document.querySelectorAll('.year-section');
+    
+    items.forEach(item => {
+        const title = item.dataset.title || '';
+        const content = item.dataset.content || '';
+        
+        if (keyword === '' || title.includes(keyword) || content.includes(keyword)) {
+            item.style.display = 'block';
