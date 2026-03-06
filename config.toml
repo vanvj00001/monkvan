@@ -1,0 +1,5 @@
+// 在config.toml中添加输出配置
+[outputs]
+  home = ["HTML", "RSS", "JSON"]
+  
+# 或者创建data文件来存储索引
