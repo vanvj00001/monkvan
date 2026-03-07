@@ -2,16 +2,20 @@
 baseURL = "https://vanvj00001.github.io/my-blog/"
 languageCode = "zh-cn"
 title = "无名梵的博客"
-theme = "PaperMod"
+theme = "ananke"
 
 # 使用Ananke主题的默认配置
 [params]
   description = "无名梵的个人博客"
-  defaultTheme = "auto"  # auto/light/dark
+  featured_image = "/images/gohugo-default-sample-hero-image.jpg"
 
-# 启用相关功能
-[build]
-  writeStats = true
+# 增加首页显示文章数量
+paginate = 40  # 或更多
+
+# 启用相关文章链接
+[params]
+  showRelatedPosts = true
+  relatedPostsLimit = 20
 
 
 
