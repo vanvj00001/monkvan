@@ -16,3 +16,7 @@ summaryLength = 200
 [author]
 name = '老梵'
 
+[[menu.main]]
+name = "关于"
+url = "/about/"
+weight = 4
