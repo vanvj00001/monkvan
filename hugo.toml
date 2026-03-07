@@ -7,14 +7,19 @@ theme = 'PaperMod'
 
 [params]
 description = '老梵的个人随笔和思考'
-author = '老梵'
+
 showVisitedLinks = true
 showReadingTime = true
 summaryLength = 200
 showPostNavigation = true
- postSeparator = "<!--more-->"
-  showSummary = true
+postSeparator = "<!--more-->"
+showSummary = true
+defaultTheme = 'auto'
 
+
+# PaperMod 特定配置
+homeInfoParams:
+Title: "最新文章"
 
 
 [author]
