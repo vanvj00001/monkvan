@@ -8,5 +8,16 @@ theme = "ananke"
 [params]
   description = "无名梵的个人博客"
   featured_image = "/images/gohugo-default-sample-hero-image.jpg"
+
+# 增加首页显示文章数量
+paginate = 20  # 或更多
+
+# 启用相关文章链接
+[params]
+  showRelatedPosts = true
+  relatedPostsLimit = 5
+
+
+
   
 # 菜单配置 - 让Ananke自动处理
