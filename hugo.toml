@@ -11,6 +11,8 @@ author = '老梵'
 showVisitedLinks = true
 showReadingTime = true
 summaryLength = 200
+  showSummary = true
+
 
 
 [author]
