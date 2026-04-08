@@ -62,14 +62,23 @@ git pull origin "$DEPLOY_BRANCH" --ff-only 2>/dev/null || true
 
 # 清空并复制新文件
 echo_blue "同步构建文件..."
-git rm -rf . 2>/dev/null || find . -maxdepth 1 -not -name '.git' -type f -delete && find . -maxdepth 1 -not -name '.git' -type d -exec rm -rf {} + 2>/dev/null || true
-if [ -d "$BUILD_DIR" ] && [ "$(ls -A "$BUILD_DIR")" ]; then
-  cp -r "$BUILD_DIR"/* .
+# 保存当前目录，用于恢复绝对路径
+DEPLOY_DIR="$(pwd)"
+
+# 删除旧文件（不删除 .git 目录）
+find . -maxdepth 1 -not -name '.git' -type f -exec rm -f {} +
+find . -maxdepth 1 -not -name '.git' -not -name '.' -type d -exec rm -rf {} + 2>/dev/null || true
+
+# 复制新文件
+if [ -d "$BUILD_DIR" ] && [ -n "$(ls -A "$BUILD_DIR")" ]; then
+  cp -r "$BUILD_DIR"/* "$DEPLOY_DIR/"
+  echo_info "文件同步完成"
 else
   echo_error "构建目录为空或不存在"
   exit 1
 fi
-touch .nojekyll
+
+touch "$DEPLOY_DIR"/.nojekyll
 
 # 提交和推送
 echo_blue "提交更改..."
