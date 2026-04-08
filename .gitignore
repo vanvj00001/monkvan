@@ -1,0 +1,21 @@
+# Hugo
+public/
+.hugo_build.lock
+
+# Node modules
+node_modules/
+
+# VS Code (macOS specific)
+.vscode/
+
+# Mac
+.DS_Store
+
+# Environment
+env
+
+# IDE
+.idea/
+*.swp
+*.swo
+
