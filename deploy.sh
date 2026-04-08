@@ -63,7 +63,12 @@ git pull origin "$DEPLOY_BRANCH" --ff-only 2>/dev/null || true
 # 清空并复制新文件
 echo_blue "同步构建文件..."
 git rm -rf . 2>/dev/null || find . -maxdepth 1 -not -name '.git' -type f -delete && find . -maxdepth 1 -not -name '.git' -type d -exec rm -rf {} + 2>/dev/null || true
-cp -r "$BUILD_DIR"/* ./
+if [ -d "$BUILD_DIR" ] && [ "$(ls -A "$BUILD_DIR")" ]; then
+  cp -r "$BUILD_DIR"/* .
+else
+  echo_error "构建目录为空或不存在"
+  exit 1
+fi
 touch .nojekyll
 
 # 提交和推送
