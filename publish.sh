@@ -29,7 +29,7 @@ if ! git diff --cached --quiet; then
   echo ""
 
   # 获取提交信息
-  read -p "$(echo -e ${BLUE}→${NC} 输入提交描述 (默认: Add new posts): " COMMIT_MSG
+  read -p "$(echo -e ${BLUE}→${NC}) 输入提交描述 (默认: Add new posts): " COMMIT_MSG
   COMMIT_MSG=${COMMIT_MSG:-"Add new posts"}
 
   echo ""
