@@ -76,4 +76,4 @@ fi
 
 echo ""
 echo_info "完成！"
-echo_blue "访问: https://vanvj00001.github.io/my-blog/"
+echo_blue "访问: https://vanvj00001.github.io/monkvan/"
