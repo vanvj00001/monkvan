@@ -19,7 +19,7 @@ echo ""
 
 echo_blue "同步内容..."
 if [ -d "/Users/fanweijun/oldvan/content" ]; then
-  cp -r /Users/fanweijun/oldvan/content/* "$SCRIPT_DIR/content/"
+echo  “cp -r /Users/fanweijun/oldvan/content/* "$SCRIPT_DIR/content/"”
   echo_info "内容同步完成"
 else
   echo_error "源目录不存在"
