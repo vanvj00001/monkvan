@@ -17,14 +17,7 @@ BUILD_DIR="${SCRIPT_DIR}/public"
 echo_blue "🚀 部署脚本"
 echo ""
 
-echo_blue "同步内容..."
-if [ -d "/Users/fanweijun/oldvan/content" ]; then
-echo  “cp -r /Users/fanweijun/oldvan/content/* "$SCRIPT_DIR/content/"”
-  echo_info "内容同步完成"
-else
-  echo_error "源目录不存在"
-fi
-echo ""
+
 
 echo_blue "清理并创建目录..."
 rm -rf "$BUILD_DIR"
