@@ -7,8 +7,11 @@
   
   // 检测当前主题
   function getCurrentTheme() {
-    if (CURRENT_PATH.startsWith('/hugo-book/')) return 'hugo-book';
-    if (CURRENT_PATH.startsWith('/papermod/')) return 'papermod';
+    const parts = CURRENT_PATH.split('/').filter(Boolean);
+    const themeIndex = parts.findIndex(part => part === 'hugo-book' || part === 'papermod');
+    if (themeIndex >= 0) {
+      return parts[themeIndex];
+    }
     return null;
   }
 
@@ -18,16 +21,29 @@
     return current === 'hugo-book' ? 'papermod' : 'hugo-book';
   }
 
+  // 获取基础路径（支持子目录仓库部署）
+  function getBasePath() {
+    const parts = CURRENT_PATH.split('/').filter(Boolean);
+    const themeIndex = parts.findIndex(part => part === 'hugo-book' || part === 'papermod');
+    if (themeIndex > 0) {
+      return `/${parts.slice(0, themeIndex).join('/')}/`;
+    }
+    return '/';
+  }
+
   // 转换 URL 到另一个主题
   function getOtherThemeUrl() {
     const current = getCurrentTheme();
-    if (!current) return '/';
+    if (!current) return getBasePath();
 
-    // 获取相对路径
-    const relativePath = CURRENT_PATH.replace(`/${current}/`, '');
+    const parts = CURRENT_PATH.split('/').filter(Boolean);
+    const themeIndex = parts.findIndex(part => part === current);
+    const basePath = getBasePath();
+    const relativeParts = parts.slice(themeIndex + 1);
+    const relativePath = relativeParts.length ? relativeParts.join('/') + '/' : '';
     const otherTheme = getOtherTheme();
-    
-    return `/${otherTheme}/${relativePath}`;
+
+    return `${basePath}${otherTheme}/${relativePath}`;
   }
 
   // 创建切换按钮
