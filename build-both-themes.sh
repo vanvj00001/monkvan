@@ -1,0 +1,231 @@
+#!/bin/bash
+
+set -euo pipefail
+
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+BLUE='\033[0;34m'
+YELLOW='\033[1;33m'
+NC='\033[0m'
+
+echo_info() { echo -e "${GREEN}✓ $1${NC}"; }
+echo_error() { echo -e "${RED}✗ $1${NC}"; }
+echo_blue() { echo -e "${BLUE}→ $1${NC}"; }
+echo_yellow() { echo -e "${YELLOW}⚠ $1${NC}"; }
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$SCRIPT_DIR"
+
+echo_blue "🚀 双主题构建脚本"
+echo ""
+
+# Clean and create directories
+echo_blue "清理并创建目录..."
+rm -rf public
+mkdir -p public/hugo-book
+mkdir -p public/papermod
+echo_info "完成"
+echo ""
+
+# Check if themes exist
+if [ ! -d "themes/hugo-book" ]; then
+    echo_error "Hugo Book 主题不存在，请先安装主题"
+    exit 1
+fi
+
+if [ ! -d "themes/PaperMod" ]; then
+    echo_error "PaperMod 主题不存在，请先安装主题"
+    exit 1
+fi
+
+# Build Hugo Book version
+echo_blue "构建 Hugo Book 主题版本..."
+HUGO_THEME=hugo-book hugo --destination public/hugo-book --baseURL "https://vanvj00001.github.io/monkvan/hugo-book/"
+echo_info "Hugo Book 版本构建完成"
+echo ""
+
+# Build PaperMod version
+echo_blue "构建 PaperMod 主题版本..."
+HUGO_THEME=PaperMod hugo --destination public/papermod --baseURL "https://vanvj00001.github.io/monkvan/papermod/"
+echo_info "PaperMod 版本构建完成"
+echo ""
+
+# Create navigation page
+echo_blue "创建导航页面..."
+cat > public/index.html << 'EOF'
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>神话传说 - 主题选择</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 90%;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 2rem;
+            font-size: 2.5rem;
+            font-weight: 300;
+        }
+        .theme-buttons {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .theme-button {
+            display: inline-block;
+            padding: 1.5rem 3rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+            border: 2px solid transparent;
+        }
+        .theme-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(102, 126, 234, 0.4);
+        }
+        .theme-button:active {
+            transform: translateY(-1px);
+        }
+        .theme-button.hugo-book {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            box-shadow: 0 8px 20px rgba(44, 62, 80, 0.3);
+        }
+        .theme-button.hugo-book:hover {
+            box-shadow: 0 12px 30px rgba(44, 62, 80, 0.4);
+        }
+        .theme-button.papermod {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            box-shadow: 0 8px 20px rgba(231, 76, 60, 0.3);
+        }
+        .theme-button.papermod:hover {
+            box-shadow: 0 12px 30px rgba(231, 76, 60, 0.4);
+        }
+        .description {
+            margin-top: 2rem;
+            color: #666;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+        .switcher-note {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+        .switcher-note p {
+            margin: 0;
+            color: #555;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🕉️ 神话传说</h1>
+
+        <div class="theme-buttons">
+            <a href="/monkvan/hugo-book/" class="theme-button hugo-book">
+                📚 Hugo Book 主题
+            </a>
+            <a href="/monkvan/papermod/" class="theme-button papermod">
+                📰 PaperMod 主题
+            </a>
+        </div>
+
+        <div class="description">
+            <p>选择您喜欢的主题来浏览网站内容</p>
+        </div>
+
+        <div class="switcher-note">
+            <p><strong>💡 提示：</strong>进入任一主题后，您可以在页面间自由切换主题，无需返回此页面。</p>
+        </div>
+    </div>
+
+    <script>
+        // Theme switcher functionality
+        function getCurrentTheme() {
+            const path = window.location.pathname;
+            if (path.includes('/hugo-book/')) return 'hugo-book';
+            if (path.includes('/papermod/')) return 'papermod';
+            return null;
+        }
+
+        function getOtherThemeUrl() {
+            const currentTheme = getCurrentTheme();
+            const currentPath = window.location.pathname;
+            const currentSearch = window.location.search;
+            const currentHash = window.location.hash;
+
+            if (currentTheme === 'hugo-book') {
+                return currentPath.replace('/hugo-book/', '/papermod/') + currentSearch + currentHash;
+            } else if (currentTheme === 'papermod') {
+                return currentPath.replace('/papermod/', '/hugo-book/') + currentSearch + currentHash;
+            }
+            return null;
+        }
+
+        function switchTheme() {
+            const otherUrl = getOtherThemeUrl();
+            if (otherUrl) {
+                // Save current scroll position
+                sessionStorage.setItem('scrollPosition', window.pageYOffset);
+                window.location.href = otherUrl;
+            }
+        }
+
+        // Restore scroll position after theme switch
+        window.addEventListener('load', function() {
+            const savedPosition = sessionStorage.getItem('scrollPosition');
+            if (savedPosition) {
+                window.scrollTo(0, parseInt(savedPosition));
+                sessionStorage.removeItem('scrollPosition');
+            }
+        });
+    </script>
+</body>
+</html>
+EOF
+echo_info "导航页面创建完成"
+echo ""
+
+# Skip script injection for now - will add later if needed
+echo_yellow "⚠ 跳过脚本注入步骤（可稍后添加）"
+echo ""
+
+echo_blue "构建完成！"
+echo ""
+echo_yellow "📁 输出目录结构:"
+echo "public/"
+echo "├── index.html          # 主题选择页面"
+echo "├── hugo-book/          # Hugo Book 主题版本"
+echo "└── papermod/           # PaperMod 主题版本"
+echo ""
+echo_info "🎉 双主题构建成功！"
+echo_blue "访问 https://vanvj00001.github.io/monkvan/ 开始使用"
