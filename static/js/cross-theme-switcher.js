@@ -18,16 +18,28 @@
     return current === 'hugo-book' ? 'papermod' : 'hugo-book';
   }
 
+  // 获取基础路径（支持子目录仓库部署）
+  function getBasePath() {
+    const parts = CURRENT_PATH.split('/').filter(Boolean);
+    if (parts[0] === 'hugo-book' || parts[0] === 'papermod') {
+      return '/';
+    }
+    if (parts[1] === 'hugo-book' || parts[1] === 'papermod') {
+      return `/${parts[0]}/`;
+    }
+    return '/';
+  }
+
   // 转换 URL 到另一个主题
   function getOtherThemeUrl() {
     const current = getCurrentTheme();
-    if (!current) return '/';
+    if (!current) return getBasePath();
 
-    // 获取相对路径
-    const relativePath = CURRENT_PATH.replace(`/${current}/`, '');
+    const basePath = getBasePath();
+    const relativePath = CURRENT_PATH.replace(`${basePath}${current}/`, '');
     const otherTheme = getOtherTheme();
-    
-    return `/${otherTheme}/${relativePath}`;
+
+    return `${basePath}${otherTheme}/${relativePath}`;
   }
 
   // 创建切换按钮
@@ -45,9 +57,42 @@
       font-size: 0.95em;
       transition: all 0.3s;
       font-family: inherit;
+      margin-right: 10px;
     `;
 
     btn.addEventListener('click', switchTheme);
+    btn.addEventListener('mouseover', () => {
+      btn.style.transform = 'scale(1.05)';
+      btn.style.boxShadow = '0 2px 8px rgba(0,0,0,0.1)';
+    });
+    btn.addEventListener('mouseout', () => {
+      btn.style.transform = 'scale(1)';
+      btn.style.boxShadow = 'none';
+    });
+
+    return btn;
+  }
+
+  // 创建返回主题选择按钮
+  function createReturnChooserButton() {
+    const btn = document.createElement('button');
+    btn.id = 'return-chooser-btn';
+    btn.textContent = '◀ 返回主题选择';
+
+    btn.style.cssText = `
+      padding: 8px 16px;
+      background: var(--color-bg, #ffffff);
+      border: 1px solid var(--color-secondary, #ddd);
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.95em;
+      transition: all 0.3s;
+      font-family: inherit;
+    `;
+
+    btn.addEventListener('click', () => {
+      window.location.href = getBasePath();
+    });
     btn.addEventListener('mouseover', () => {
       btn.style.transform = 'scale(1.05)';
       btn.style.boxShadow = '0 2px 8px rgba(0,0,0,0.1)';
@@ -91,22 +136,32 @@
 
     for (let container of possibleContainers) {
       if (container && !container.querySelector('#theme-switcher-btn')) {
-        const btn = createThemeSwitcher();
-        container.appendChild(btn);
+        const switchBtn = createThemeSwitcher();
+        const returnBtn = createReturnChooserButton();
+        container.appendChild(returnBtn);
+        container.appendChild(switchBtn);
         return;
       }
     }
 
     // 如果找不到合适的位置，添加到 body
     if (!document.querySelector('#theme-switcher-btn')) {
-      const btn = createThemeSwitcher();
-      btn.style.cssText += `
+      const switchBtn = createThemeSwitcher();
+      const returnBtn = createReturnChooserButton();
+      switchBtn.style.cssText += `
         position: fixed;
         top: 20px;
         right: 20px;
         z-index: 9999;
       `;
-      document.body.appendChild(btn);
+      returnBtn.style.cssText += `
+        position: fixed;
+        top: 20px;
+        right: 180px;
+        z-index: 9999;
+      `;
+      document.body.appendChild(returnBtn);
+      document.body.appendChild(switchBtn);
     }
   }
 
