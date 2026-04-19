@@ -51,6 +51,12 @@ HUGO_THEME=PaperMod hugo --destination public/papermod --baseURL "https://vanvj0
 echo_info "PaperMod 版本构建完成"
 echo ""
 
+# Copy static files to PaperMod
+echo_blue "复制静态文件到 PaperMod 版本..."
+cp -r static/* public/papermod/ 2>/dev/null || true
+echo_info "静态文件复制完成"
+echo ""
+
 # Create navigation page
 echo_blue "创建导航页面..."
 cat > public/index.html << 'EOF'
