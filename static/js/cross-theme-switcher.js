@@ -127,46 +127,38 @@
     }
   }
 
-  // 注入切换按钮到导航
+  // 创建按钮容器
+  function createButtonContainer() {
+    const wrapper = document.createElement('div');
+    wrapper.id = 'theme-switcher-wrapper';
+    wrapper.style.cssText = `
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      z-index: 9999;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      padding: 4px;
+      pointer-events: auto;
+    `;
+    return wrapper;
+  }
+
+  // 注入切换按钮到页面
   function injectSwitcherToNavigation() {
-    // 尝试多种位置注入
-    const possibleContainers = [
-      document.querySelector('nav'),
-      document.querySelector('header'),
-      document.querySelector('[role="navigation"]'),
-      document.querySelector('.book-header'),
-      document.querySelector('.site-header')
-    ];
-
-    for (let container of possibleContainers) {
-      if (container && !container.querySelector('#theme-switcher-btn')) {
-        const switchBtn = createThemeSwitcher();
-        const returnBtn = createReturnChooserButton();
-        container.appendChild(returnBtn);
-        container.appendChild(switchBtn);
-        return;
-      }
+    if (document.querySelector('#theme-switcher-wrapper')) {
+      return;
     }
 
-    // 如果找不到合适的位置，添加到 body
-    if (!document.querySelector('#theme-switcher-btn')) {
-      const switchBtn = createThemeSwitcher();
-      const returnBtn = createReturnChooserButton();
-      switchBtn.style.cssText += `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        z-index: 9999;
-      `;
-      returnBtn.style.cssText += `
-        position: fixed;
-        top: 20px;
-        right: 180px;
-        z-index: 9999;
-      `;
-      document.body.appendChild(returnBtn);
-      document.body.appendChild(switchBtn);
-    }
+    const switchBtn = createThemeSwitcher();
+    const returnBtn = createReturnChooserButton();
+    const wrapper = createButtonContainer();
+
+    wrapper.appendChild(returnBtn);
+    wrapper.appendChild(switchBtn);
+    document.body.appendChild(wrapper);
   }
 
   // 初始化
