@@ -1,7 +1,7 @@
 {
 	"version": 3,
 	"file": "style.min.css",
-	"sourceRoot": "/Users/vanvj/my-blog",
+	"sourceRoot": "/Users/fanweijun/monkvan",
 	"sources": [
 		"themes/fixit/assets/css/style.scss",
 		"themes/fixit/assets/css/_variables.scss",
