@@ -1,72 +1,78 @@
 #!/usr/bin/env bash
+# -----------------------------------------------------------------
+# Deploy script for the monkvan Hugo site
+# -----------------------------------------------------------------
+# Usage: ./deploy.sh [commit message]
+# If no message is supplied a default one with a timestamp is used.
+# -----------------------------------------------------------------
+
 set -euo pipefail
 
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-BLUE='\033[0;34m'
-NC='\033[0m'
+# ----------------------------------------
+# Configuration
+# ----------------------------------------
+REMOTE_URL="https://github.com/vanvj00001/monkvan.git"
+GH_PAGES_BRANCH="gh-pages"
+COMMIT_MSG="${1:-Deploy: $(date '+%Y-%m-%d %H:%M:%S')}"
 
-echo_info() { echo -e "${GREEN}✓ $1${NC}"; }
-echo_error() { echo -e "${RED}✗ $1${NC}"; }
-echo_blue() { echo -e "${BLUE}→ $1${NC}"; }
+# ----------------------------------------
+# 1. Build the site
+# ----------------------------------------
+echo "=========================================="
+echo "Building Hugo site …"
+echo "=========================================="
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-cd "$SCRIPT_DIR"
-BUILD_DIR="${SCRIPT_DIR}/public"
+hugo --minify   # generates ./public
 
-echo_blue "🚀 部署脚本"
-echo ""
+# ----------------------------------------
+# 2. Prepare a temporary work‑tree on gh‑pages
+# ----------------------------------------
+TMP_WT=$(mktemp -d)
 
-
-
-echo_blue "清理并创建目录..."
-rm -rf "$BUILD_DIR"
-mkdir -p "$BUILD_DIR"
-echo_info "完成"
-echo ""
-
-echo_blue "复制静态文件..."
-if [ -f "$SCRIPT_DIR/static/gold.html" ]; then
-    cp "$SCRIPT_DIR/static/gold.html" "$BUILD_DIR/"
-fi
-if [ -d "$SCRIPT_DIR/static/gold-data" ]; then
-    cp -r "$SCRIPT_DIR/static/gold-data" "$BUILD_DIR/"
-fi
-echo_info "完成"
-echo ""
-
-if [ ! -d "$SCRIPT_DIR/themes/hugo-book/.git" ]; then
-  echo_blue "主题缺失，正在下载 hugo-book..."
-  rm -rf "$SCRIPT_DIR/themes/hugo-book"
-  mkdir -p "$SCRIPT_DIR/themes"
-  git clone https://github.com/alex-shpak/hugo-book.git "$SCRIPT_DIR/themes/hugo-book"
-  echo_info "主题下载完成"
-  echo ""
+# If gh‑pages exists locally, use it; otherwise create it from the remote (or as new)
+if git rev-parse --verify "$GH_PAGES_BRANCH" >/dev/null 2>&1; then
+    git worktree add -B "$GH_PAGES_BRANCH" "$TMP_WT" "$GH_PAGES_BRANCH"
+else
+    # Try to fetch the branch from remote; if that fails we create a fresh orphan branch
+    git fetch "$REMOTE_URL" "$GH_PAGES_BRANCH":"$GH_PAGES_BRANCH" 2>/dev/null || true
+    git worktree add -B "$GH_PAGES_BRANCH" "$TMP_WT"
 fi
 
-echo_blue "构建 Hugo 站点..."
-hugo --minify
-echo_info "完成"
-echo ""
+# ----------------------------------------
+# 3. Copy site files into the work‑tree
+# ----------------------------------------
+echo "[3/4] Copying site files to $GH_PAGES_BRANCH …"
+# Remove everything in the work‑tree except its own .git directory
+find "$TMP_WT" -mindepth 1 -maxdepth 1 ! -name ".git" -exec rm -rf {} +
 
-echo_blue "同步到 GitHub..."
-git checkout gh-pages 2>/dev/null || git checkout -b gh-pages
-git pull origin gh-pages --ff-only 2>/dev/null || true
+# Copy the freshly built site
+cp -r public/* "$TMP_WT/"
+# Ensure GitHub Pages skips Jekyll processing
+touch "$TMP_WT/.nojekyll"
 
-find . -maxdepth 1 -not -name '.git' -not -name 'public' -not -name 'hugo.toml' -not -name 'deploy.sh' -not -name 'go.mod' -not -name 'go.sum' -not -name '.gitignore' -not -name 'README.md' -not -name 'LICENSE' -type f -exec rm -f {} +
-find . -maxdepth 1 -not -name '.git' -not -name 'public' -not -name '.' -not -name 'content' -not -name 'themes' -not -name 'static' -not -name 'assets' -not -name 'resources' -not -name '.github' -not -name 'layouts' -type d -exec rm -rf {} + 2>/dev/null || true
+# ----------------------------------------
+# 4. Commit & push the gh‑pages branch
+# ----------------------------------------
+cd "$TMP_WT"
 
-cp -r "$BUILD_DIR"/* ./
-touch .nojekyll
+echo "[4/4] Committing and pushing $GH_PAGES_BRANCH …"
 
 git add -A
-if git diff --cached --quiet; then
-    echo_info "没有新内容"
+if git commit -m "$COMMIT_MSG"; then
+    echo "Commit created."
 else
-    git commit -m "Deploy: $(date +'%Y-%m-%d %H:%M:%S')"
-    git push origin gh-pages
+    echo "No changes to commit."
 fi
 
-echo ""
-echo_info "完成！"
-echo_blue "访问: https://vanvj00001.github.io/monkvan/"
+git push "$REMOTE_URL" "$GH_PAGES_BRANCH"
+
+# ----------------------------------------
+# 5. Clean up temporary work‑tree
+# ----------------------------------------
+cd -
+git worktree remove "$TMP_WT"
+
+echo "=========================================="
+echo "Deploy finished!"
+echo "Site is live at: https://vanvj00001.github.io/monkvan/"
+echo "=========================================="
