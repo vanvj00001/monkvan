@@ -50,8 +50,8 @@ echo_info "完成"
 echo ""
 
 echo_blue "同步到 GitHub..."
-git checkout main 2>/dev/null || git checkout -b main
-git pull origin main --ff-only 2>/dev/null || true
+git checkout gh-pages 2>/dev/null || git checkout -b gh-pages
+git pull origin gh-pages --ff-only 2>/dev/null || true
 
 find . -maxdepth 1 -not -name '.git' -not -name 'public' -not -name 'hugo.toml' -not -name 'deploy.sh' -not -name 'go.mod' -not -name 'go.sum' -not -name '.gitignore' -not -name 'README.md' -not -name 'LICENSE' -type f -exec rm -f {} +
 find . -maxdepth 1 -not -name '.git' -not -name 'public' -not -name '.' -not -name 'content' -not -name 'themes' -not -name 'static' -not -name 'assets' -not -name 'resources' -not -name '.github' -not -name 'layouts' -type d -exec rm -rf {} + 2>/dev/null || true
@@ -64,7 +64,7 @@ if git diff --cached --quiet; then
     echo_info "没有新内容"
 else
     git commit -m "Deploy: $(date +'%Y-%m-%d %H:%M:%S')"
-    git push origin main
+    git push origin gh-pages
 fi
 
 echo ""
