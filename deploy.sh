@@ -4,11 +4,11 @@ set -e
 
 REPO_DIR="${PWD}"
 COMMIT_MSG="${1:-deploy: $(date '+%Y-%m-%d %H:%M:%S')}"
-REMOTE_URL="https://vanvj00003@github.com/vanvj00003/my-blog.git"
+REMOTE_URL=""
 GH_PAGES_BRANCH="gh-pages"
 
 echo "=========================================="
-echo "发布博客到 https://vanvj00003.github.io/my-blog/"
+echo "发布博客到 https://vanvj00001.github.io/monkvan/"
 echo "=========================================="
 
 cd "$REPO_DIR"
@@ -32,5 +32,5 @@ git push ${REMOTE_URL:-origin} ${GH_PAGES_BRANCH}
 
 echo "=========================================="
 echo "发布完成！"
-echo "博客地址：https://vanvj00003.github.io/my-blog/"
+echo "博客地址：https://vanvj00001.github.io/monkvan/"
 echo "=========================================="
