@@ -1,0 +1,23 @@
+/*
+  You can add custom styles here.
+  It could be plugins:
+    @import "plugins/numbered";
+    @import "plugins/scrollbars";
+    @import "plugins/themes";
+  Or custom styles:
+    body { background: white; }
+  Or even theme mixins:
+    @mixin theme-light {
+      --body-background: white;
+      --body-font-color: black;
+      ...
+    }
+*/
+
+/* Ensure taxonomy list items keep original line height when date is added */
+.book-section-flat li.flex .ml-auto {
+  flex-shrink: 0;
+  font-size: 0.85rem; /* slightly smaller to fit inline */
+  line-height: 1;
+}
+
