@@ -4,5 +4,5 @@ bookCollapseSection: true
 cascade:
   categories:
     - "亚洲神话"
-key: 2
+weight: 2
 ---
