@@ -1,5 +1,6 @@
 ---
 title: "UFO跨文化比较：全球不同文明如何看待天空中的谜"
+weight: 11
 url: "/posts/专题/ufo-special/ufo-cross-culture-comparison/"
 pageViewsKey: "/posts/专题/ufo-special/ufo-cross-culture-comparison/"
 date: 2026-05-09T20:00:00+08:00

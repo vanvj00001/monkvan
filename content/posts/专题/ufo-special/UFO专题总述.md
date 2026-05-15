@@ -1,5 +1,6 @@
 ---
 title: "UFO专题总述：天空中的神秘之光"
+weight: 1
 url: "/posts/专题/ufo-special/ufo-mythology-overview/"
 pageViewsKey: "/posts/专题/ufo-special/ufo-mythology-overview/"
 date: 2026-05-09T20:00:00+08:00

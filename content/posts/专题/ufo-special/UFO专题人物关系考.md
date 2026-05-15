@@ -1,5 +1,6 @@
 ---
 title: "UFO专题人物关系考：目击者、研究者与争议制造者"
+weight: 3
 url: "/posts/专题/ufo-special/ufo-mythology-relationships/"
 pageViewsKey: "/posts/专题/ufo-special/ufo-mythology-relationships/"
 date: 2026-05-09T20:00:00+08:00

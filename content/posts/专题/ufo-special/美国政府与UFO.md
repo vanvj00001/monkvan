@@ -1,5 +1,6 @@
 ---
 title: "美国政府与UFO：从蓝皮书到UAP的官方隐瞒与披露"
+weight: 13
 url: "/posts/专题/ufo-special/us-government-ufo/"
 pageViewsKey: "/posts/专题/ufo-special/us-government-ufo/"
 date: 2026-05-09T20:00:00+08:00
