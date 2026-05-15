@@ -1,3 +1,4 @@
 ---
 title: "波罗的海神话"
+bookCollapseSection: true
 ---

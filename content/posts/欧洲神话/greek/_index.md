@@ -1,6 +1,7 @@
 ---
 title: "希腊神话"
+bookCollapseSection: true
 cascade:
   categories:
-    - "亚洲神话"
+    - "欧洲神话"
 ---

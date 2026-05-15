@@ -1,5 +1,6 @@
 ---
 title: "江南神话"
+bookCollapseSection: true
 date: 2026-05-07T10:00:00+08:00
 draft: false
 cascade:
