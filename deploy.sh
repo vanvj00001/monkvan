@@ -17,7 +17,18 @@ BUILD_DIR="${SCRIPT_DIR}/public"
 echo_blue "🚀 部署脚本"
 echo ""
 
-
+echo_blue "压缩备份..."
+BAK_DIR="/Users/fanweijun/vanbak"
+mkdir -p "$BAK_DIR"
+BAK_FILE="${BAK_DIR}/monkvan-$(date +'%Y%m%d-%H%M%S').tar.gz"
+tar -czf "$BAK_FILE" -C "$SCRIPT_DIR" \
+    --exclude='.git' \
+    --exclude='public' \
+    --exclude='resources' \
+    --exclude='node_modules' \
+    .
+echo_info "备份完成: $BAK_FILE"
+echo ""
 
 echo_blue "清理并创建目录..."
 rm -rf "$BUILD_DIR"
