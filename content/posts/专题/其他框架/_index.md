@@ -1,7 +1,7 @@
 ---
 
-title: "其他"
-url: "/posts/其他框架/_index/"
+title: "其他框架体系"
+url: "/posts/专题/其他框架/_index/"
 bookCollapseSection: true
 cascade:
   categories:
