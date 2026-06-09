@@ -1,7 +1,7 @@
 ---
-title: "中国神话"
+title: "古代神话"
 bookCollapseSection: true
 cascade:
   categories:
-    - "亚洲神话"
+    - "中国神话"
 ---
