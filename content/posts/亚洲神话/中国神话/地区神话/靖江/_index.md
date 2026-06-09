@@ -1,21 +1,7 @@
 ---
 title: "靖江神话"
-url: /posts/亚洲神话/中国神话/地区神话/靖江/
-date: 2026-06-08T12:00:00+08:00
-draft: false
-weight: 200
-categories:
-  - 中国神话
-  - 地区神话
-tags:
-  - 靖江神话
-  - 江苏神话
-  - 白马驮沙
-  - 岳飞
-  - 生祠
-  - 城隍
-  - 天妃
-  - 龙王
-  - 孤山
-  - 泥狗子
+bookCollapseSection: true
+cascade:
+  categories:
+    - "地区神话"
 ---
