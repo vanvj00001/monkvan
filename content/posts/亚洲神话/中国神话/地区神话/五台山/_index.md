@@ -7,7 +7,6 @@ bookCollapseSection: true
 cascade:
   categories:
     - "地区神话"
-    - "五台山神话"
 ---
 
 ## 五台山神话
