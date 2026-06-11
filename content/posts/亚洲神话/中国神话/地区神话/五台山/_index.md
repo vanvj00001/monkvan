@@ -1,6 +1,8 @@
 ---
 title: "五台山神话"
 date: 2026-06-09T11:00:00+08:00
+draft: false
+weight: 200
 bookCollapseSection: true
 cascade:
   categories:
