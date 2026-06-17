@@ -20,6 +20,18 @@ echo ""
 echo_blue "压缩备份..."
 BAK_DIR="/Users/fanweijun/vanbak"
 mkdir -p "$BAK_DIR"
+
+# 清理旧备份: 只保留最新 3 个 monkvan-*.tar.gz, 多余的删掉
+KEEP_COUNT=3
+EXISTING=$(ls -t "$BAK_DIR"/monkvan-*.tar.gz 2>/dev/null || true)
+EXISTING_COUNT=$(echo "$EXISTING" | grep -c . || true)
+if [ "$EXISTING_COUNT" -gt "$KEEP_COUNT" ]; then
+    REMOVE=$(echo "$EXISTING" | tail -n +$((KEEP_COUNT + 1)))
+    echo_blue "清理旧备份 (保留最新 $KEEP_COUNT 个, 删除 $((EXISTING_COUNT - KEEP_COUNT)) 个)..."
+    echo "$REMOVE" | xargs rm -f
+    echo_info "旧备份已删除"
+fi
+
 BAK_FILE="${BAK_DIR}/monkvan-$(date +'%Y%m%d-%H%M%S').tar.gz"
 tar -czf "$BAK_FILE" -C "$SCRIPT_DIR" \
     --exclude='.git' \
