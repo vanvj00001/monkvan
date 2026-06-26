@@ -91,5 +91,38 @@ else
 fi
 
 echo ""
-echo_info "完成！"
-echo_blue "访问: https://vanvj00001.github.io/monkvan/"
+
+echo_blue "部署到 NAS 本地服务器..."
+REMOTE_HOST="192.168.2.233"
+REMOTE_USER="vanvj"
+REMOTE_DIR="/vol3/1000/vanvj-EXT-12T/7900/monkvan-site"
+REMOTE_PASS="van89bian"
+
+# 为 NAS 重建（baseURL 不同）
+hugo --gc --baseURL "http://${REMOTE_HOST}:8088/"
+echo_info "NAS 版构建完成"
+
+# rsync 到 NAS
+sshpass -p "$REMOTE_PASS" rsync -avz --delete \
+  -e "ssh -o StrictHostKeyChecking=no" \
+  "$BUILD_DIR/" \
+  "${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_DIR}/"
+echo_info "NAS 部署完成"
+echo ""
+
+# 恢复 GitHub 版构建（用于后续 git push）
+rm -rf "$BUILD_DIR"
+mkdir -p "$BUILD_DIR"
+if [ -f "$SCRIPT_DIR/static/gold.html" ]; then
+    cp "$SCRIPT_DIR/static/gold.html" "$BUILD_DIR/"
+fi
+if [ -d "$SCRIPT_DIR/static/gold-data" ]; then
+    cp -r "$SCRIPT_DIR/static/gold-data" "$BUILD_DIR/"
+fi
+hugo --minify
+echo_info "GitHub 版构建恢复完成"
+
+echo ""
+echo_info "全部完成！"
+echo_blue "GitHub Pages: https://vanvj00001.github.io/monkvan/"
+echo_blue "NAS 本地:     http://${REMOTE_HOST}:8088/"
